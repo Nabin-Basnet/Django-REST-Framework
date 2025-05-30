@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home,personView,personDetailView,studentView,studentDetailView,teachers,teacherDetailView
+from .views import home,personView,personDetailView,studentView,studentDetailView,teachers,teacherDetailView,employee,employeeDetailView
 
 
 urlpatterns=[
@@ -12,4 +12,7 @@ urlpatterns=[
 
     path('teachers',teachers.as_view()),
     path('teachers/<int:pk>',teacherDetailView.as_view()),
+
+    path('employee',employee.as_view()),
+    path('employee/<int:pk>',employeeDetailView.as_view()),
 ]

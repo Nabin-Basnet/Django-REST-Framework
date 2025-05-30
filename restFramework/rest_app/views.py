@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404
-from .models import person, student, teacher
-from .serializers import personSerilizers, studentSerilizer, teacherSerilizer
+from .models import person, student, teacher,Employee
+from .serializers import personSerilizers, studentSerilizer, teacherSerilizer,EmployeeSerilizer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -139,3 +139,13 @@ class teacherDetailView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixi
     def delete(self, request, pk):
         # Delete a teacher object
         return self.destroy(request, pk)
+
+
+class employee(generics.ListCreateAPIView):
+    queryset=Employee.objects.all()
+    serializer_class=EmployeeSerilizer
+
+class employeeDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset=Employee.objects.all()
+    serializer_class=EmployeeSerilizer
+    lookup_field='pk'

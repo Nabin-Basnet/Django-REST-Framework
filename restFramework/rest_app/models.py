@@ -13,13 +13,13 @@ class student(models.Model):
     std_id=models.IntegerField()
     std_address=models.CharField(max_length=50)
 
-class teacher(models.Model):
-    name=models.CharField(max_length=50)
-    school=models.CharField(max_length=200)
-    subject=models.CharField(max_length=50)
-
 class Employee(models.Model):
     name=models.CharField(max_length=50)
     company=models.CharField(max_length=200)
     job=models.CharField(max_length=50)
-    
+
+
+class teacher(models.Model):
+    name=models.CharField(max_length=50)
+    school=models.CharField(max_length=200)
+    subject=models.CharField(max_length=50)
