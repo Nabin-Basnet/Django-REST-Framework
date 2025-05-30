@@ -1,6 +1,9 @@
-from django.urls import path
-from .views import home,personView,personDetailView,studentView,studentDetailView,teachers,teacherDetailView,employee,employeeDetailView
+from django.urls import path,include
+from .views import home,personView,personDetailView,studentView,studentDetailView,teachers,teacherDetailView,EmployeeListCreateView,EmployeeDetailView,staffsView
+from rest_framework.routers import DefaultRouter
 
+router=DefaultRouter()
+router.register('staff',staffsView,basename='staff')
 
 urlpatterns=[
     path('',home),
@@ -13,6 +16,8 @@ urlpatterns=[
     path('teachers',teachers.as_view()),
     path('teachers/<int:pk>',teacherDetailView.as_view()),
 
-    path('employee',employee.as_view()),
-    path('employee/<int:pk>',employeeDetailView.as_view()),
+    path('employee',EmployeeListCreateView.as_view()),
+    path('employee/<int:pk>',EmployeeDetailView.as_view()),
+
+    path('',include(router.urls))
 ]

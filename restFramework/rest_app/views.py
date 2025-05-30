@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins,viewsets
 
 # Basic view to verify that the project is running
 def home(request):
@@ -150,3 +150,42 @@ class EmployeeDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Employee.objects.all()  # Use all employee records as the source queryset
     serializer_class = EmployeeSerilizer  # Use the same serializer as above
     lookup_field = 'pk'  # Identify records using the 'pk' (primary key) field
+
+
+# Custom ViewSet for handling staff-related CRUD operations
+class staffsView(viewsets.ViewSet):
+
+    # Handle GET request to list all staff records
+    def list(self, request):
+        queryset = staff.objects.all()
+        serializer = staffSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    # Handle POST request to create a new staff record
+    def create(self, request):
+        serializer = staffSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+    # Handle GET request to retrieve a specific staff record by ID
+    def retrieve(self, request, pk):
+        staffs = get_object_or_404(staff, pk=pk)
+        serializer = staffSerializer(staffs)
+        return Response(serializer.data)
+
+    # Handle PUT request to update a specific staff record by ID
+    def update(self, request, pk):
+        staffs = get_object_or_404(staff, pk=pk)
+        serializer = staffSerializer(staffs, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+    # Handle DELETE request to remove a specific staff record by ID
+    def delete(self, request, pk):
+        staffs = get_object_or_404(staff, pk=pk)
+        staffs.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
