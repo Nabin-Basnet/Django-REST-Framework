@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404
-from .models import person, student, teacher, Employee,staff
+from .models import person, student, teacher, Employee,staff,address
 from .serializers import personSerilizers, studentSerilizer, teacherSerilizer, EmployeeSerilizer,staffSerializer
 from rest_framework.response import Response
 from rest_framework import status
@@ -189,3 +189,4 @@ class staffsView(viewsets.ViewSet):
         staffs = get_object_or_404(staff, pk=pk)
         staffs.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    

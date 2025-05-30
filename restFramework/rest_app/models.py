@@ -30,3 +30,8 @@ class staff(models.Model):
     address=models.CharField(max_length=50)
     organization_name=models.CharField(max_length=100)
     work=models.CharField(max_length=100)
+
+class address(models.Model):
+    city=models.CharField(max_length=50)
+    district=models.CharField(max_length=50)
+    country=models.CharField(max_length=50)
