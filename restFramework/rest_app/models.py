@@ -23,3 +23,10 @@ class teacher(models.Model):
     name=models.CharField(max_length=50)
     school=models.CharField(max_length=200)
     subject=models.CharField(max_length=50)
+
+
+class staff(models.Model):
+    name=models.CharField(max_length=50)
+    address=models.CharField(max_length=50)
+    organization_name=models.CharField(max_length=100)
+    work=models.CharField(max_length=100)

@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404
-from .models import person, student, teacher, Employee
-from .serializers import personSerilizers, studentSerilizer, teacherSerilizer, EmployeeSerilizer
+from .models import person, student, teacher, Employee,staff
+from .serializers import personSerilizers, studentSerilizer, teacherSerilizer, EmployeeSerilizer,staffSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
