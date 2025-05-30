@@ -1,151 +1,152 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404
-from .models import person, student, teacher,Employee
-from .serializers import personSerilizers, studentSerilizer, teacherSerilizer,EmployeeSerilizer
+from .models import person, student, teacher, Employee
+from .serializers import personSerilizers, studentSerilizer, teacherSerilizer, EmployeeSerilizer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import generics, mixins
 
-# Basic view to confirm if the project is working
+# Basic view to verify that the project is running
 def home(request):
-    return HttpResponse("Hello! here we are learning django rest_framework.")
+    return HttpResponse("Hello! Here we are learning Django REST Framework.")
 
-# Function-based view to handle GET (list all persons) and POST (create person)
+# Function-based view to list all persons or create a new person
 @api_view(['GET', 'POST'])
 def personView(request):
     if request.method == 'GET':
-        # Fetch all person records
+        # Retrieve all person records from the database
         Person = person.objects.all()
-        # Serialize the queryset
+        # Serialize and return the list of persons
         serializer = personSerilizers(Person, many=True)
-        # Return the serialized data
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
-        # Deserialize the incoming request data
+        # Deserialize the input data to create a new person
         serializer = personSerilizers(data=request.data)
         if serializer.is_valid():
-            # Save the data to the database if valid
+            # Save the new person to the database
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        # Return error if data is invalid
+        # Return validation errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Function-based view to handle GET, PUT, DELETE operations for a single person
+# Function-based view to retrieve, update, or delete a specific person by ID
 @api_view(['GET', 'PUT', 'DELETE'])
 def personDetailView(request, pk):
     try:
-        # Attempt to fetch person by primary key
+        # Try to retrieve the person by primary key
         persons = person.objects.get(pk=pk)
     except:
-        # Return 400 error if person is not found
+        # Return error if the person is not found
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'GET':
-        # Serialize the person instance
+        # Serialize and return the person data
         serializer = personSerilizers(persons)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'PUT':
-        # Deserialize and update the person instance
+        # Deserialize input and update the person record
         serializer = personSerilizers(persons, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        # Return validation errors
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        # Delete the person record
+        # Delete the specified person record
         persons.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-# Class-based view for handling GET and POST operations for student model
+# Class-based view to list all students or create a new student
 class studentView(APIView):
     def get(self, request):
-        # Fetch all student records
+        # Retrieve all student records
         students = student.objects.all()
-        # Serialize the queryset
+        # Serialize and return the list
         serializer = studentSerilizer(students, many=True)
         return Response(serializer.data)
 
     def post(self, request):
-        # Deserialize incoming data
+        # Deserialize and create a new student
         serializer = studentSerilizer(data=request.data)
         if serializer.is_valid():
-            # Save if valid
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # Return validation errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Class-based view for handling GET, PUT, DELETE for a single student
+# Class-based view to retrieve, update, or delete a specific student
 class studentDetailView(APIView):
-    # Helper method to fetch student or raise 404
     def get_object(self, pk):
+        # Helper function to get a student by ID or raise 404
         try:
             return student.objects.get(pk=pk)
         except student.DoesNotExist:
             raise Http404
 
     def get(self, request, pk):
-        # Fetch and serialize student
+        # Retrieve and return student data
         students = self.get_object(pk)
         serializer = studentSerilizer(students)
         return Response(serializer.data)
 
     def put(self, request, pk):
-        # Fetch student and deserialize update data
+        # Update a student record with input data
         students = self.get_object(pk)
         serializer = studentSerilizer(students, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
+        # Return validation errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        # Delete the student instance
+        # Delete a student record
         students = self.get_object(pk)
         students.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-# Generic class-based view using mixins to handle GET (list) and POST (create) for teachers
+# Generic view using mixins to list or create teacher records
 class teachers(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
-    queryset = teacher.objects.all()  # Set queryset to all teacher records
-    serializer_class = teacherSerilizer  # Define serializer class
+    queryset = teacher.objects.all()
+    serializer_class = teacherSerilizer
 
     def get(self, request):
         # Return list of all teachers
         return self.list(request)
 
     def post(self, request):
-        # Create new teacher record
+        # Create a new teacher record
         return self.create(request)
 
-# Generic class-based view using mixins to handle GET (retrieve), PUT (update), and DELETE for a single teacher
+# Generic view using mixins to retrieve, update, or delete a specific teacher
 class teacherDetailView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
-    queryset = teacher.objects.all()  # Set queryset to all teachers
-    serializer_class = teacherSerilizer  # Define serializer class
+    queryset = teacher.objects.all()
+    serializer_class = teacherSerilizer
 
     def get(self, request, pk):
-        # Return a single teacher object
+        # Retrieve and return a single teacher
         return self.retrieve(request, pk)
 
     def put(self, request, pk):
-        # Update a teacher object
+        # Update an existing teacher record
         return self.update(request, pk)
 
     def delete(self, request, pk):
-        # Delete a teacher object
+        # Delete a teacher record
         return self.destroy(request, pk)
 
+##Generic class-based view to handle listing all employees and creating a new employee
+class EmployeeListCreateView(generics.ListCreateAPIView):
+    queryset = Employee.objects.all()  # Fetch all employee records from the database
+    serializer_class = EmployeeSerilizer  # Use the Employee serializer to handle input/output
 
-class employee(generics.ListCreateAPIView):
-    queryset=Employee.objects.all()
-    serializer_class=EmployeeSerilizer
-
-class employeeDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset=Employee.objects.all()
-    serializer_class=EmployeeSerilizer
-    lookup_field='pk'
+# Generic class-based view to retrieve, update, or delete a specific employee by primary key (pk)
+class EmployeeDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Employee.objects.all()  # Use all employee records as the source queryset
+    serializer_class = EmployeeSerilizer  # Use the same serializer as above
+    lookup_field = 'pk'  # Identify records using the 'pk' (primary key) field
