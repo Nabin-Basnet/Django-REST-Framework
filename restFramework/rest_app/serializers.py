@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import person,student,teacher,Employee,staff,address
+from .models import person,student,teacher,Employee,staff,Address
 
 class personSerilizers(serializers.ModelSerializer):
     class Meta:
@@ -29,7 +29,7 @@ class staffSerializer(serializers.ModelSerializer):
         model=staff
         fields='__all__'
 
-class addressSerializer(serializers.Serializer):
+class addressSerializer(serializers.ModelSerializer):
     class Meta:
-        model=address
-        fileds='__all__'
+        model = Address
+        fields = '__all__'  # This is importan

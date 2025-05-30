@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404
-from .models import person, student, teacher, Employee,staff,address
-from .serializers import personSerilizers, studentSerilizer, teacherSerilizer, EmployeeSerilizer,staffSerializer
+from .models import person, student, teacher, Employee,staff,Address
+from .serializers import personSerilizers, studentSerilizer, teacherSerilizer, EmployeeSerilizer,staffSerializer,addressSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -189,4 +189,9 @@ class staffsView(viewsets.ViewSet):
         staffs = get_object_or_404(staff, pk=pk)
         staffs.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+# ViewSet to automatically handle all CRUD operations for the Address model
+class addressView(viewsets.ModelViewSet):
+    queryset = Address.objects.all()  # Retrieve all address records
+    serializer_class = addressSerializer  # Use addressSerializer for serialization/deserialization
     
