@@ -11,8 +11,10 @@ def home(request):
 class BlogViewSet(viewsets.ModelViewSet):  # Renamed class
     queryset = Blog.objects.all()
     serializer_class = blogSerializer
+    lookup_field='pk'
 
 
 class coommentsView(viewsets.ModelViewSet):
     queryset=Comment.objects.all()
     serializer_class=commentsSerializer
+    lookup_field='pk'
