@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import generics, mixins,viewsets
+from .paginations import CustomPagination
 
 # Basic view to verify that the project is running
 def home(request):
@@ -194,4 +195,5 @@ class staffsView(viewsets.ViewSet):
 class addressView(viewsets.ModelViewSet):
     queryset = Address.objects.all()  # Retrieve all address records
     serializer_class = addressSerializer  # Use addressSerializer for serialization/deserialization
+    pagination_class=CustomPagination #add custom pagination
     
