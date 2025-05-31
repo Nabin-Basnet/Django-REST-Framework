@@ -196,4 +196,5 @@ class addressView(viewsets.ModelViewSet):
     queryset = Address.objects.all()  # Retrieve all address records
     serializer_class = addressSerializer  # Use addressSerializer for serialization/deserialization
     pagination_class=CustomPagination #add custom pagination
+    filterset_fields=['district']
     
