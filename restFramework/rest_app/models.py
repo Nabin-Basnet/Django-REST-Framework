@@ -32,6 +32,7 @@ class staff(models.Model):
     work=models.CharField(max_length=100)
 
 class Address(models.Model):
+    add_num=models.CharField(max_length=20,default="add001")
     city=models.CharField(max_length=50)
     district=models.CharField(max_length=50)
     country=models.CharField(max_length=50)
